@@ -1,48 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { CtaSection } from "@/components/sections/cta-section";
-
-const projectFilters = ["All", "Web design", "Branding", "Development", "Support"];
-
-const projects = [
-  {
-    title: "Radiant skincare branding",
-    description: "Radiant skincare is offering a user-centric, ad-free platform.",
-    image: "/images/work-1.jpg",
-    tags: ["Branding", "UX/UI"],
-    category: "Branding",
-  },
-  {
-    title: "Apex clothing Co. rebrand",
-    description: "Elevates roots for a more confident apparel brand.",
-    image: "/images/work-2.jpg",
-    tags: ["Strategy", "Visual identity"],
-    category: "Web design",
-  },
-  {
-    title: "Vero app development",
-    description: "Vero entered a digital market in a competitive social media landscape.",
-    image: "/images/work-3.jpg",
-    tags: ["App build", "Development"],
-    category: "Development",
-  },
-  {
-    title: "Stoyo branding",
-    description: "Visual identity and packaging design for a Tokyo brand.",
-    image: "/images/work-4.jpg",
-    tags: ["Branding", "Support"],
-    category: "Support",
-  },
-  {
-    title: "Timeless impressions redesign",
-    description: "Gives new life to an eco-conscious accessories brand.",
-    image: "/images/work-5.jpg",
-    tags: ["Redesign", "Brand"],
-    category: "Web design",
-  },
-];
+import { projectFilters, projects } from "@/lib/content/projects";
 
 export function ProjectsPageContent() {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -93,23 +55,25 @@ export function ProjectsPageContent() {
 
           <div className="mt-7 grid gap-x-5 gap-y-10 md:grid-cols-2">
             {visibleProjects.map((project) => (
-              <article key={project.title} className="group">
-                <div className="relative aspect-731/445 overflow-hidden bg-[#f1f1f1]">
-                  <Image src={project.image} alt={project.title} fill className="zoom-media object-cover" />
-                  <span className="corner-accent absolute right-4 top-4" aria-hidden />
-                </div>
-                <h3 className="mt-4 text-[clamp(1.35rem,2vw,1.65rem)] font-semibold leading-[1.1] tracking-tighter">
-                  {project.title}
-                </h3>
-                <p className="mt-1 text-sm tracking-[-0.03em] text-[#0c0c0c]/60">{project.description}</p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="tag-pill">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </article>
+              <Link key={project.slug} href={`/projects/${project.slug}`} className="group block">
+                <article>
+                  <div className="relative aspect-731/445 overflow-hidden bg-[#f1f1f1]">
+                    <Image src={project.image} alt={project.title} fill className="zoom-media object-cover" />
+                    <span className="corner-accent absolute right-4 top-4" aria-hidden />
+                  </div>
+                  <h3 className="mt-4 text-[clamp(1.35rem,2vw,1.65rem)] font-semibold leading-[1.1] tracking-tighter">
+                    {project.title}
+                  </h3>
+                  <p className="mt-1 text-sm tracking-[-0.03em] text-[#0c0c0c]/60">{project.description}</p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="tag-pill">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         </div>
