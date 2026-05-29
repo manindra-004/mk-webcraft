@@ -11,6 +11,7 @@ export function SiteHeader({ variant = "overlay" }) {
   const [showLogoImage, setShowLogoImage] = useState(true);
   const [solidHeader, setSolidHeader] = useState(false);
   const isOverlay = variant === "overlay";
+  const isSolidFixed = variant === "solid-fixed";
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -43,9 +44,9 @@ export function SiteHeader({ variant = "overlay" }) {
       }
     };
 
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-    update();
   }, [isOverlay, open]);
 
   useEffect(() => {
@@ -63,7 +64,9 @@ export function SiteHeader({ variant = "overlay" }) {
         hidden && !open ? "-translate-y-full" : "translate-y-0",
         isOverlay
           ? `fixed inset-x-0 top-0 ${solidHeader ? "bg-[#0c0c0c]" : "bg-transparent"}`
-          : "relative bg-[#0c0c0c]"
+          : isSolidFixed
+            ? "fixed inset-x-0 top-0 bg-[#0c0c0c]"
+            : "relative bg-[#0c0c0c]"
       )}
     >
       <div className="flex flex-col gap-10 p-[7px]">
@@ -153,14 +156,20 @@ export function SiteHeader({ variant = "overlay" }) {
               </div>
 
               <nav className="flex flex-col items-end gap-1 text-right">
-                {["Home", "About", "Projects (17)", "Blog", "Contact"].map((label) => (
+                {[
+                  { label: "Home", href: "/" },
+                  { label: "About", href: "/about" },
+                  { label: "Projects", href: "/#work" },
+                  { label: "Blog", href: "/#blog" },
+                  { label: "Contact", href: "/#contact" },
+                ].map((item) => (
                   <Link
-                    key={label}
-                    href="#"
+                    key={item.label}
+                    href={item.href}
                     className="font-bebas text-[40px] leading-[0.95] tracking-[-2px] text-white transition-colors hover:text-[#39ff14]"
                     onClick={() => setOpen(false)}
                   >
-                    {label}
+                    {item.label}
                   </Link>
                 ))}
               </nav>
