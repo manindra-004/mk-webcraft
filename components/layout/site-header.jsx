@@ -3,15 +3,37 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/cn";
 
 export function SiteHeader({ variant = "overlay" }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [showLogoImage, setShowLogoImage] = useState(true);
   const [solidHeader, setSolidHeader] = useState(false);
   const isOverlay = variant === "overlay";
   const isSolidFixed = variant === "solid-fixed";
+  const menuItems = [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Projects", href: "/projects" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
+  ];
+
+  const handleMenuNavigate = (event, href) => {
+    event.preventDefault();
+    setOpen(false);
+
+    if (pathname === href) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    router.push(href);
+  };
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -156,18 +178,12 @@ export function SiteHeader({ variant = "overlay" }) {
               </div>
 
               <nav className="flex flex-col items-end gap-1 text-right">
-                {[
-                  { label: "Home", href: "/" },
-                  { label: "About", href: "/about" },
-                  { label: "Projects", href: "/projects" },
-                  { label: "Blog", href: "/blog" },
-                  { label: "Contact", href: "/#contact" },
-                ].map((item) => (
+                {menuItems.map((item) => (
                   <Link
                     key={item.label}
                     href={item.href}
                     className="font-bebas text-[40px] leading-[0.95] tracking-[-2px] text-white transition-colors hover:text-[#39ff14]"
-                    onClick={() => setOpen(false)}
+                    onClick={(event) => handleMenuNavigate(event, item.href)}
                   >
                     {item.label}
                   </Link>
